@@ -1,0 +1,15 @@
+# 初始化GPIO21
+echo 21 > /sys/class/gpio/export
+# 执行后，/sys/class/gpio/下面增加了代表GPIO21的一个目录，目录名就是gpio21。
+
+# 下一步，把GPIO21置于输出状态：
+echo out > /sys/class/gpio/gpio21/direction
+
+# 最后，向GPIO21写入1，从而让PIN处于高电压——LED灯亮
+echo 1 > /sys/class/gpio/gpio21/value
+
+# 通过写入0让PIN处于低电压——LED灯灭
+echo 0 > /sys/class/gpio/gpio21/value
+
+# 使用完毕GPIO21，可以删除该端口
+echo 21 > /sys/class/gpio/unexport
