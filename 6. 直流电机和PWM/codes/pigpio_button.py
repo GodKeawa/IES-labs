@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# 按键控制电机转速
+# 按键控制电机转速，pigpio重构
 import RPi.GPIO as GPIO
+import pigpio
 import time
+pi = pigpio.pi()
+
 # 设置按键以及输出引脚，BTN1和BTN2分别为减速和加速的按键
 EA, I2, I1 = (13, 19, 26)
 BTN1, BTN2 = (6, 5)
@@ -19,15 +22,16 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup([EA, I2, I1], GPIO.OUT)
 GPIO.output([EA, I2], GPIO.LOW)
 GPIO.output(I1, GPIO.HIGH)
-GPIO.setup([BTN1, BTN2], GPIO.IN, 
-	pull_up_down = GPIO.PUD_UP)
+GPIO.setup([BTN1, BTN2], GPIO.IN, pull_up_down = GPIO.PUD_UP)
 
 # 使用GPIO库的pwm功能，创建一个PWM类的实例pwm
 # 创建时需要指定两个参数：第一个参数指定输出引脚，第二个参数指定PWM波的频率。
-pwm = GPIO.PWM(EA, FREQUENCY)
+# pwm = GPIO.PWM(EA, FREQUENCY)
+pi.set_PWM_frequency(EA, FREQUENCY)
 
 # 执行下面的代码之后，相应的引脚开始持续产生PWM输出。需要指定一个参数：占空比的值。范围是0~100。
-pwm.start(DUTYS[duty_level])
+# pwm.start(DUTYS[duty_level])
+pi.set_PWM_range(EA, DUTYS[duty_level])
 print("duty = %d" % DUTYS[duty_level])
 
 # 检查按键是否被按下
@@ -40,7 +44,8 @@ def update_duty_level(delta):
     global duty_level
     old = duty_level
     duty_level = (duty_level + delta) % len(DUTYS)
-    pwm.ChangeDutyCycle(DUTYS[duty_level])
+    # pwm.ChangeDutyCycle(DUTYS[duty_level])
+    pi.set_PWM_dutycycle(EA, DUTYS[duty_level])
     print("duty: %d --> %d" % (DUTYS[old], DUTYS[duty_level]))
 
 
@@ -72,6 +77,7 @@ except KeyboardInterrupt:
     pass
 # 在程序结束前，不仅要调用GPIO.cleanup()，还要调用pwm.stop()来停止PWM输出
 # 否则程序结束后，这个PWM会持续输出，造成不必要的能耗以及以外损坏的风险。
-pwm.stop()
+# pwm.stop()
+pi.set_PWM_dutycycle(EA, 0)
 GPIO.cleanup()
                 
