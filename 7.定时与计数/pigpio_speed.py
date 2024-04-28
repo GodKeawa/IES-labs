@@ -1,10 +1,12 @@
 # 库引入
 import RPi.GPIO as GPIO
+import pigpio
 import time  # 引入时间库
 import threading  # 引入线程库
 import numpy
 import matplotlib.pyplot as plt
 
+pi = pigpio.pi()
 # 接口定义与初始化
 # 设置各个GPIO口与pwm
 EA, I2, I1, EB, I4, I3, LS, RS = (13, 19, 26, 16, 20, 21, 6, 12)
@@ -15,10 +17,16 @@ GPIO.setup([LS, RS], GPIO.IN)
 GPIO.output([EA, I2, EB, I3], GPIO.LOW)
 GPIO.output([I1, I4], GPIO.HIGH)
 
-pwma = GPIO.PWM(EA, FREQUENCY)
-pwmb = GPIO.PWM(EB, FREQUENCY)
-pwma.start(0)  # 占空比为0
-pwmb.start(0)
+# pwma = GPIO.PWM(EA, FREQUENCY)
+# pwmb = GPIO.PWM(EB, FREQUENCY)
+pi.set_PWM_frequency(EA, FREQUENCY)
+pi.set_PWM_frequency(EB, FREQUENCY)
+pi.set_PWM_range(EA, 100)
+pi.set_PWM_range(EB, 100)
+# pwma.start(0)  # 占空比为0
+# pwmb.start(0)
+pi.set_PWM_dutycycle(EA, 0)
+pi.set_PWM_dutycycle(EB, 0)
 
 lspeed = 0
 rspeed = 0
@@ -72,8 +80,11 @@ while i <= 20:
     # 主函数每隔3秒增加一次pwm的占空比（本例中步长为5%）。
     # 并读取一次新占空比下的两个speed，存入两个数组中。
     x.append(5 * i)
-    pwma.ChangeDutyCycle(5 * i)
-    pwmb.ChangeDutyCycle(5 * i)
+    # pwma.ChangeDutyCycle(5 * i)
+    # pwmb.ChangeDutyCycle(5 * i)
+    pi.set_PWM_dutycycle(EA, 5 * i)
+    pi.set_PWM_dutycycle(EB, 5 * i)
+
     time.sleep(3)
     y1.append(lspeed)
     y2.append(rspeed)
@@ -82,7 +93,10 @@ while i <= 20:
 # 显示出lspeed与rspeed关于pwm的关系图像。
 plt.plot(x, y1, "-o")
 plt.plot(x, y2, "-*")
-pwma.stop()
-pwmb.stop()
+# pwma.stop()
+# pwmb.stop()
+pi.set_PWM_dutycycle(EA, 0)
+pi.set_PWM_dutycycle(EB, 0)
+
 GPIO.cleanup()
 plt.show()
