@@ -25,6 +25,8 @@ pi.set_PWM_dutycycle(EB, 0)
 
 lcounter = 0
 rcounter = 0
+lspeed = 0
+rspeed = 0
 
 
 # event detect函数
@@ -50,7 +52,7 @@ while i <= 20:
     pi.set_PWM_dutycycle(EA, 5 * i)
     pi.set_PWM_dutycycle(EB, 5 * i)
 
-    time.sleep(2) #等待加速
+    time.sleep(1.5) #等待加速
     rcounter = 0
     lcounter = 0
     # 添加两个边沿检测，并调回my_callback
@@ -61,8 +63,11 @@ while i <= 20:
     # 终止event_detect
     GPIO.remove_event_detect(LS)
     GPIO.remove_event_detect(RS)
-    y1.append(lcounter / 58.5)
-    y2.append(rcounter / 58.5)
+    time.sleep(1.4)
+    lspeed = lcounter / 58.5
+    rspeed = rcounter / 58.5
+    y1.append(lspeed)
+    y2.append(rspeed)
     i = i + 1
 
 # 显示出lspeed与rspeed关于pwm的关系图像。

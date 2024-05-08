@@ -101,7 +101,7 @@ def new_getspeed():
     # GPIO.RISING 也可以使用GPIO.FALLING、GPIO.BOTH 对边缘进行检测
     GPIO.add_event_detect(LS, GPIO.RISING, callback=my_callback)
     GPIO.add_event_detect(RS, GPIO.RISING, callback=my_callback)
-    time.sleep(1)
+    time.sleep(0.1)
     # 终止event_detect
     GPIO.remove_event_detect(LS)
     GPIO.remove_event_detect(RS)
@@ -118,10 +118,11 @@ while i <= 20:
     pi.set_PWM_dutycycle(EA, 5 * i)
     pi.set_PWM_dutycycle(EB, 5 * i)
 
-    time.sleep(2)  # 等待加速
+    time.sleep(1.5)  # 等待加速
     rcounter = 0
     lcounter = 0
-    getspeed()  # 运行1秒event_detect
+    getspeed()  # 运行0.1秒event_detect
+    time.sleep(1.4)
     new_y1.append(lcounter / 585.0)
     new_y2.append(rcounter / 585.0)
     i = i + 1
