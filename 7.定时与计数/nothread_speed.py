@@ -38,19 +38,6 @@ def my_callback(channel):  # 定义回调函数
         rcounter += 1
 
 
-# 测速函数
-def getspeed():
-    # lcounter与rcounter用于记录从上一次被清零开始，两个霍尔传感器收到了多少个方波
-    global lcounter
-    global rcounter
-    # 添加两个边沿检测，并调回my_callback
-    # GPIO.RISING 也可以使用GPIO.FALLING、GPIO.BOTH 对边缘进行检测
-    GPIO.add_event_detect(LS, GPIO.RISING, callback=my_callback)
-    GPIO.add_event_detect(RS, GPIO.RISING, callback=my_callback)
-    time.sleep(1)
-    # 终止event_detect
-    GPIO.remove_event_detect(LS)
-    GPIO.remove_event_detect(RS)
 
 i = 0
 x = []
@@ -66,7 +53,14 @@ while i <= 20:
     time.sleep(2) #等待加速
     rcounter = 0
     lcounter = 0
-    getspeed() # 运行1秒event_detect
+    # 添加两个边沿检测，并调回my_callback
+    # GPIO.RISING 也可以使用GPIO.FALLING、GPIO.BOTH 对边缘进行检测
+    GPIO.add_event_detect(LS, GPIO.RISING, callback=my_callback)
+    GPIO.add_event_detect(RS, GPIO.RISING, callback=my_callback)
+    time.sleep(1)
+    # 终止event_detect
+    GPIO.remove_event_detect(LS)
+    GPIO.remove_event_detect(RS)
     y1.append(lcounter / 585.0)
     y2.append(rcounter / 585.0)
     i = i + 1
