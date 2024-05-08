@@ -57,12 +57,12 @@ while i <= 20:
     # GPIO.RISING 也可以使用GPIO.FALLING、GPIO.BOTH 对边缘进行检测
     GPIO.add_event_detect(LS, GPIO.RISING, callback=my_callback)
     GPIO.add_event_detect(RS, GPIO.RISING, callback=my_callback)
-    time.sleep(1)
+    time.sleep(0.1)
     # 终止event_detect
     GPIO.remove_event_detect(LS)
     GPIO.remove_event_detect(RS)
-    y1.append(lcounter / 585.0)
-    y2.append(rcounter / 585.0)
+    y1.append(lcounter / 58.5)
+    y2.append(rcounter / 58.5)
     i = i + 1
 
 # 显示出lspeed与rspeed关于pwm的关系图像。
