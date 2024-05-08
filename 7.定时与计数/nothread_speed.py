@@ -48,7 +48,9 @@ def getspeed():
     GPIO.add_event_detect(LS, GPIO.RISING, callback=my_callback)
     GPIO.add_event_detect(RS, GPIO.RISING, callback=my_callback)
     time.sleep(1)
-    # 函数结束将自动终止event_detect,这里就不remove了
+    # 终止event_detect
+    GPIO.remove_event_detect(LS)
+    GPIO.remove_event_detect(RS)
 
 i = 0
 x = []

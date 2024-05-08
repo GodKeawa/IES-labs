@@ -88,6 +88,8 @@ while i <= 20:
 pi.set_PWM_dutycycle(EA, 0)
 pi.set_PWM_dutycycle(EB, 0)
 
+GPIO.remove_event_detect(LS)
+GPIO.remove_event_detect(RS)
 
 # 单线程模式
 # 新测速函数
@@ -100,7 +102,9 @@ def new_getspeed():
     GPIO.add_event_detect(LS, GPIO.RISING, callback=my_callback)
     GPIO.add_event_detect(RS, GPIO.RISING, callback=my_callback)
     time.sleep(1)
-    # 函数结束将自动终止event_detect,这里就不remove了
+    # 终止event_detect
+    GPIO.remove_event_detect(LS)
+    GPIO.remove_event_detect(RS)
 
 
 i = 0
