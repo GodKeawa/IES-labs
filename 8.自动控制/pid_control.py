@@ -5,7 +5,7 @@ import numpy
 import matplotlib.pyplot as plt
 
 
-EA, I2, I1, EB, I4, I3, LS, RS = (13, 19, 26, 16, 20, 21, 6, 12)
+EA, I2, I1, EB, I4, I3, LS, RS = (13, 26, 19, 16, 20, 21, 6, 12)
 FREQUENCY = 50
 GPIO.setmode(GPIO.BCM)
 GPIO.setup([EA, I2, I1, EB, I4, I3], GPIO.OUT)
@@ -83,8 +83,8 @@ def getspeed():
     GPIO.add_event_detect(LS,GPIO.RISING,callback=my_callback)
     GPIO.add_event_detect(RS,GPIO.RISING,callback=my_callback)
     while True:
-        rspeed=(rcounter/585.0)
-        lspeed=(lcounter/585.0)
+        rspeed=(rcounter/58.5)
+        lspeed=(lcounter/58.5)
         rcounter = 0
         lcounter = 0
         time.sleep(0.1)
@@ -100,13 +100,13 @@ i=0
 x=[]
 y1=[]
 y2=[]
-speed = 1.9
+speed = 3
 l_origin_duty = 5
 r_origin_duty = 5
 pwma.start(l_origin_duty)
 pwmb.start(r_origin_duty)
-L_control = PID(30,0.06,20,speed,l_origin_duty)
-R_control = PID(40,0.01,23,speed,r_origin_duty)
+L_control = PID(3,0.02,20,speed,l_origin_duty)
+R_control = PID(3,0.02,20,speed,r_origin_duty)
 
 try:
     while True:
