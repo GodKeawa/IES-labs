@@ -1,0 +1,22 @@
+安装：
+sudo apt-get update       
+sudo apt-get install motion
+sudo apt-get gedit
+修改配置文件：
+sudo gedit /etc/motion/motion.conf
+
+      width 640
+      height 480
+      framerate 25
+      output_pictures off
+      ffmpeg_output_movies off
+      stream_port 8081  # 可更改, 后续vlc播放使用此端口
+      stream_maxrate 25  # 实时流帧率限制
+      stream_localhost off  # 取消仅本地流连接限制
+      webcontrol_port 8080  # 可更改, 后续浏览器播放使用此端口
+      webcontrol_localhost off  # 取消仅本地控制连接限制
+     
+其他更多参数亦可根据需求进行设置
+
+运行：
+sudo motion
